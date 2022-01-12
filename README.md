@@ -6,7 +6,7 @@ Requires Visual Studio 2019,
 
 * The database is created using a code first approach with entity framework core.
 * Migrations are created and data is seeded. 
-* Open nuget package manager and run update-database command.
+* Open nuget package manager and run update-database command/CLI and run dotnet ef database update from the HotDrinksMachine.Server project directory.
 * Database will be created on localhost in a database called HotDrinksMachine
 
 Run the application in debug mode and run through the simple demo.
