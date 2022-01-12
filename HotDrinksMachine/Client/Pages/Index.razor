@@ -1,0 +1,51 @@
+﻿@page "/"
+@using System.Net.Http
+@using HotDrinksMachine.Shared.Entities
+@inject HttpClient Http
+
+<div class="text-center">
+    <h1>Hot Drinks Machine!</h1>
+    <h3>Please, select your drink.</h3>
+
+    @if (drinks == null)
+    {
+        <div>Loading drinks...</div>
+    }
+    else
+    {
+        foreach (var drink in drinks)
+        {
+            <div class="btn-group">
+                <button class="btn btn-outline-dark btn-light m-1" @onclick="(() => SelectDrink(drink.Id))">
+                    <h3>@drink.Name</h3>
+                </button>
+            </div>
+        }
+    }
+
+    <div class="my-3">
+        @if (currentPreparationActions != null)
+        {
+            @foreach (var preparationAction in currentPreparationActions)
+            {
+                <div class="m-1">@preparationAction</div>
+            }
+        }
+    </div>
+</div>
+
+@code{
+    List<Drink> drinks;
+    private List<string> currentPreparationActions;
+
+    protected override async Task OnInitializedAsync() =>
+        drinks = await Http.GetFromJsonAsync<List<Drink>>("api/Drinks");
+
+    private void SelectDrink(int drinkId)
+    {
+        currentPreparationActions = drinks.Where(x => x.Id == drinkId)
+            .SingleOrDefault().DrinkPreparationActions
+            .Select(s => s.PreparationAction.Description)
+            .ToList();
+    }
+}
